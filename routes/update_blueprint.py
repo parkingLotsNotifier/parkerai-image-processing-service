@@ -9,11 +9,10 @@ update_blueprint_model = api.model('UpdateBlueprintModel', {
     'blueprint': fields.Raw(required=True, description='Updated blueprint JSON')
 })
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class UpdateBlueprint(Resource):
     @api.expect(update_blueprint_model)
     def post(self):
-        """Update the blueprint JSON file"""
         data = request.get_json()
         blueprint = data.get('blueprint')
 
@@ -23,4 +22,3 @@ class UpdateBlueprint(Resource):
         save_blueprint(blueprint)
         log_message("Blueprint updated successfully", "INFO")
         return jsonify({'message': 'Blueprint updated successfully'})
-
