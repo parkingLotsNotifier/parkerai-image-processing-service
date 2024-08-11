@@ -21,17 +21,21 @@ def decode_image_from_base64(image_base64):
 
 
 def handle_cropping(img, blueprint):
-    annotations = blueprint["annotations"]
-    categories = {
-        category["id"]: category["name"] for category in blueprint["categories"]
-    }
+    slots = blueprint.get("slots", [])
     cropped_images = []
 
-    for annotation in annotations:
-        x, y, w, h = annotation["bbox"]
-        cropped_img = img[int(y) : int(y + h), int(x) : int(x + w)]
-        name = categories[annotation["category_id"]]
-        cropped_images.append(cropped_img)
+    for slot in slots:
+        coordinates = slot.get("coordinate")
+
+        if coordinates:
+            x1 = float(coordinates["x1"])
+            y1 = float(coordinates["y1"])
+            w = float(coordinates["w"])
+            h = float(coordinates["h"])
+
+            # Perform cropping
+            cropped_img = img[int(y1) : int(y1 + h), int(x1) : int(x1 + w)]
+            cropped_images.append(cropped_img)
 
     return cropped_images
 
