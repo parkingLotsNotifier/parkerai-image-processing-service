@@ -2,9 +2,12 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 import datetime
+from dotenv import load_dotenv
+
 
 class FirebaseLogger:
     def __init__(self):
+        load_dotenv(dotenv_path='/app/.env')
         self.cred_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
         self.cred = credentials.Certificate(self.cred_path)
         self.app = firebase_admin.initialize_app(self.cred)
