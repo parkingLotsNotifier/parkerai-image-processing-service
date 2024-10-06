@@ -7,7 +7,8 @@ import base64
 def encode_image_to_base64(image):
     if not isinstance(image, np.ndarray):
         raise ValueError("The image to encode must be a numpy array.")
-
+    if image.size == 0:
+        return
     _, buffer = cv2.imencode(".jpg", image)
     jpg_as_text = base64.b64encode(buffer).decode("utf-8")
     return jpg_as_text
@@ -26,7 +27,7 @@ def handle_cropping(img, blueprint):
 
     for slot in slots:
         coordinates = slot.get("coordinate")
-
+        print(coordinates)
         if coordinates:
             x1 = float(coordinates["x1"])
             y1 = float(coordinates["y1"])
@@ -35,8 +36,8 @@ def handle_cropping(img, blueprint):
 
             # Perform cropping
             cropped_img = img[int(y1) : int(y1 + h), int(x1) : int(x1 + w)]
+            print("cropped image", img)
             cropped_images.append(cropped_img)
-
     return cropped_images
 
 
